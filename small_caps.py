@@ -94,3 +94,18 @@ def extract_numbers(input_text:str = None):
             pass
     return output_number
 # ---------------------------------------------------------------------------------------------------------------------
+def extract_unternehmensprofil(file_name:str = None, ariva_namelist:list = None):
+    with open(file_name, 'a', newline='\n') as csvfile:
+        uprofil_csv_file = csv.writer(csvfile, delimiter=';',quotechar='"')
+        uprofil_csv_file.writerow(['WKN','ARIVA_NAME','UNTERNEHMENSPROFIL'])
+        browser = open_and_confirm_dsvgo(headless = True)
+        for wkn, instrument_name in ariva_namelist.items():
+            url = f'https://www.ariva.de/aktien/{instrument_name}/unternehmen/unternehmensprofil'
+            print(url)
+            browser.get(url)
+            time.sleep(3)
+            p_unternehmensprofil = browser.find_element_by_xpath('//app-stock-company/app-stock-company-profile/div/div/div[1]/p').text
+            unternehmensprofil = [wkn, instrument_name, p_unternehmensprofil]
+            uprofil_csv_file.writerow(unternehmensprofil)                
+    browser.close()
+    return None
