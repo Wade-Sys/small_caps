@@ -10,11 +10,14 @@ import csv
 import matplotlib.pyplot as plt
 
 # ---------------------------------------------------------------------------------------------------------------------
-def open_and_confirm_dsvgo(headless = True, url='https://www.ariva.de/') -> webdriver:    
+def open_and_confirm_dsvgo(headless = True, url='https://www.ariva.de/', exec_path=None) -> webdriver:
     webdriver_options = webdriver.FirefoxOptions()
     if headless:
         webdriver_options.add_argument('-headless')
-    browser = webdriver.Firefox(options=webdriver_options)
+    if exec_path != None:
+        browser = webdriver.Firefox(options=webdriver_options, executable_path=exec_path)
+    else:
+        browser = webdriver.Firefox(options=webdriver_options)
     browser.get(url)
     time.sleep(8)
     dsvgo_iframe = browser.find_element_by_xpath('/html/body/div[6]/iframe')
